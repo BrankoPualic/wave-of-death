@@ -27,36 +27,36 @@ function app(): void {
 
   const enemy = new Zombie();
 
-const walls: IEntityBox[] = [
-  {
-    x: 800,
-    y: 150,
-    width: 25,
-    height: 100,
-  },
-];
-
-
-	function gameLoop() {
-	  canvas.clear();
-  ctx.fillStyle = 'red';
-  for (const wall of walls)
-    ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
-
-  // hitbox
-  ctx.strokeStyle = 'lime';
-  ctx.strokeRect(enemy.x, enemy.y, enemy.width, enemy.height);
-
-  enemy.moveTo(
+  const walls: IEntityBox[] = [
     {
-      // center
-      x: canvas.width / 2 - enemy.width / 2,
-      y: canvas.height / 2 - enemy.height / 2,
-    } as IPosition,
-    walls,
-  );
+      x: 800,
+      y: 150,
+      width: 25,
+      height: 100,
+    },
+  ];
 
-  ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+  function gameLoop() {
+    canvas.clear();
+    ctx.fillStyle = 'red';
+    for (const wall of walls)
+      ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
 
-  requestAnimationFrame(gameLoop);
+    // hitbox
+    ctx.strokeStyle = 'lime';
+    ctx.strokeRect(enemy.x, enemy.y, enemy.width, enemy.height);
+
+    enemy.moveTo(
+      {
+        // center
+        x: canvas.width / 2 - enemy.width / 2,
+        y: canvas.height / 2 - enemy.height / 2,
+      } as IPosition,
+      walls,
+    );
+
+    ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+
+    requestAnimationFrame(gameLoop);
+  }
 }
