@@ -1,7 +1,9 @@
 import { Canvas } from './canvas.js';
 import { Player } from './entities/player.js';
 import { Game } from './game.js';
-import { IPosition, Zombie } from './zombies/zombie.js';
+import { IEntityBox } from './interfaces/entity-box-interface.js';
+import { IPosition } from './interfaces/position-interface.js';
+import { Zombie } from './zombies/zombie.js';
 
 window.addEventListener('load', () => {
   app();
@@ -25,17 +27,30 @@ function app(): void {
 
   const enemy = new Zombie();
 
+const wall = {
+  x: 800,
+  y: 150,
+  width: 25,
+  height: 100,
+} as IEntityBox;
+const walls = [wall];
+
+
 	function gameLoop() {
 	  canvas.clear();
+  ctx.fillStyle = 'red';
+  ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
 
-	  enemy.moveTo({
-	    // center
-	    x: canvas.width / 2 - enemy.width / 2,
-	    y: canvas.height / 2 - enemy.height / 2,
-	  } as IPosition);
+  enemy.moveTo(
+    {
+      // center
+      x: canvas.width / 2 - enemy.width / 2,
+      y: canvas.height / 2 - enemy.height / 2,
+    } as IPosition,
+    walls,
+  );
 
-	  ctx?.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+  ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
 
-	  requestAnimationFrame(gameLoop);
-	}
+  requestAnimationFrame(gameLoop);
 }
