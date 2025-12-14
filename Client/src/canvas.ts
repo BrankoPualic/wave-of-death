@@ -14,11 +14,15 @@ export class Canvas {
 
     this._ctx = context;
 
-    this._ctx.fillStyle = 'green';
-    this._ctx.fillRect(0, 0, canvas.width, canvas.height);
+    this.load();
   }
 
   getContext = () => this._ctx;
+
+  load() {
+    this._ctx.fillStyle = 'green';
+    this._ctx.fillRect(0, 0, this.width, this.height);
+  }
 
   clear() {
     this._ctx.clearRect(0, 0, this.width, this.height);
