@@ -1,12 +1,14 @@
+import { Canvas } from './canvas.js';
 import { Game } from './game.js';
 
-const canvas = document.getElementById('game') as HTMLCanvasElement;
-const ctx = canvas.getContext('2d');
+window.addEventListener('load', () => {
+  app();
+});
 
-if (!ctx) throw new Error('Canvas context not found');
+function app(): void {
+  const canvas = new Canvas();
+  const ctx = canvas.getContext();
 
-ctx.fillStyle = 'black';
-ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-const game = new Game(ctx);
-game.start();
+  const game = new Game(ctx);
+  game.start();
+}
