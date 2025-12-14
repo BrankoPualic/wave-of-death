@@ -9,8 +9,8 @@ export class Player extends Entity {
   private _keys = new Set<string>();
   private _facing: 'left' | 'right' = 'right';
 
-  constructor(x?: number, y?: number, width?: number, height?: number) {
-    super(x, y, width, height);
+  constructor(x: number, y: number) {
+    super(x, y);
   }
 
   load(canvas: Canvas): void {

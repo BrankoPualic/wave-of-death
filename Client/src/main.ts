@@ -10,7 +10,7 @@ function app(): void {
   const canvas = new Canvas();
   const ctx = canvas.getContext();
 
-  const player = new Player();
+  const player = new Player(0, 0);
   player.load(canvas);
 
   const game = new Game(ctx, player, canvas);
