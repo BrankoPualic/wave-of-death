@@ -1,11 +1,23 @@
-export class Game {
-  private ctx: CanvasRenderingContext2D;
+import { Canvas } from './canvas';
+import { Player } from './entities/player';
 
-  constructor(private context: CanvasRenderingContext2D) {
-    this.ctx = context;
-  }
+export class Game {
+  constructor(
+    private ctx: CanvasRenderingContext2D,
+    private player: Player,
+    private canvas: Canvas,
+  ) {}
 
   start() {
     console.log('game started');
+    requestAnimationFrame(this.loop);
   }
+
+  loop = () => {
+    this.canvas.clear();
+    this.canvas.load();
+    this.player.update();
+    this.player.draw(this.ctx);
+    requestAnimationFrame(this.loop);
+  };
 }

@@ -1,21 +1,18 @@
 import { Canvas } from '../canvas.js';
-import { IPosition } from '../common/position.js';
 import { Entity } from './entity.js';
 
 export class Player extends Entity {
-  private _speed = 10;
+  private _speed = 5;
   private readonly _imgSrc = 'assets/player.png';
   private _image?: HTMLImageElement;
 
-  private _canvas?: Canvas;
+  private _keys = new Set<string>();
 
   constructor(x?: number, y?: number, width?: number, height?: number) {
     super(x, y, width, height);
   }
 
   load(canvas: Canvas): void {
-    this._canvas = canvas;
-
     this.x = canvas.width / 2 - this.width / 2;
     this.y = canvas.height / 2 - this.height / 2;
 
@@ -28,47 +25,43 @@ export class Player extends Entity {
     });
 
     const player = this as Player;
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-      this.handleKeydown(e, player);
-    });
-  }
-
-  moveTo(position: IPosition): void {
-    this.x += position.x;
-    this.y += position.y;
-
-    this.moveAnimation();
-  }
-
-  moveAnimation() {
-    if (!this._canvas) throw new Error('Canvas not loaded.');
-
-    this._canvas.clear();
-
-    this._canvas.load();
-    this._canvas
-      .getContext()
-      .drawImage(this._image!, this.x, this.y, this.width, this.height);
+    document.addEventListener('keydown', (e: KeyboardEvent) =>
+      this.handleKeydown(e, player),
+    );
+    document.addEventListener('keyup', (e: KeyboardEvent) =>
+      this.handleKeyup(e, player),
+    );
   }
 
   handleKeydown(e: KeyboardEvent, player: Player): void {
-    switch (e.code) {
-      case 'KeyW':
-        player.y -= this._speed;
-        break;
-      case 'KeyS':
-        player.y += this._speed;
-        break;
-      case 'KeyA':
-        player.x -= this._speed;
-        break;
-      case 'KeyD':
-        player.x += this._speed;
-        break;
-      default:
-        break;
+    player._keys.add(e.code);
+  }
+
+  handleKeyup(e: KeyboardEvent, player: Player): void {
+    player._keys.delete(e.code);
+  }
+
+  update(): void {
+    let vx = 0;
+    let vy = 0;
+
+    if (this._keys.has('KeyW')) vy -= 1;
+    if (this._keys.has('KeyS')) vy += 1;
+    if (this._keys.has('KeyA')) vx -= 1;
+    if (this._keys.has('KeyD')) vx += 1;
+
+    // Diagonal movement
+    if (vx !== 0 && vy !== 0) {
+      const inv = 1 / Math.sqrt(2);
+      vx *= inv;
+      vy *= inv;
     }
 
-    player.moveAnimation();
+    this.x += vx * this._speed;
+    this.y += vy * this._speed;
+  }
+
+  draw(ctx: CanvasRenderingContext2D): void {
+    ctx.drawImage(this._image!, this.x, this.y, this.width, this.height);
   }
 }

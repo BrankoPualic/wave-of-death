@@ -13,6 +13,6 @@ function app(): void {
   const player = new Player();
   player.load(canvas);
 
-  const game = new Game(ctx);
+  const game = new Game(ctx, player, canvas);
   game.start();
 }
