@@ -7,37 +7,61 @@ export class Zombie {
   y = 50;
   readonly width = 50;
   readonly height = 50;
-  readonly speed = 2;
+  readonly speed = 4;
 
   constructor() {}
 
-  moveTo(position: IPosition, walls: IEntityBox[]) {
+  moveTo(target: IPosition, walls: IEntityBox[]) {
     // distance from target poistion and entity
-    const dx = position.x - this.x;
-    const dy = position.y - this.y;
+    const dx = target.x - this.x;
+    const dy = target.y - this.y;
 
     // vector
-    const distance = Math.sqrt(dx * dx + dy * dy);
+    const distance = Math.hypot(dx, dy);
 
-    if (distance <= 1) return; // this is to prevent the bug for division by zero, also jitter
+    if (distance < 1.5) return; // this is to prevent the bug for division by zero, also jitter
 
-    // Predict next position
-    const nextX = this.x + (dx / distance) * this.speed;
-    const nextY = this.y + (dy / distance) * this.speed;
+    const dirX = dx / distance;
+    const dirY = dy / distance;
 
-    const nextRect = {
+    // TRY X MOVE
+    const nextX = this.x + dirX * this.speed;
+
+    const xRect: IEntityBox = {
       x: nextX,
+      y: this.y,
+      width: this.width,
+      height: this.height,
+    };
+
+    let xBlocked = false;
+    for (const wall of walls) {
+      if (isColliding(xRect, wall)) {
+        xBlocked = true;
+        break;
+      }
+    }
+
+    if (!xBlocked) {
+      this.x = nextX;
+    }
+
+    // TRY Y MOVE
+    const nextY = this.y + dirY * this.speed;
+
+    const yRect: IEntityBox = {
+      x: this.x,
       y: nextY,
       width: this.width,
       height: this.height,
-    } as IEntityBox;
+    };
 
     for (const wall of walls) {
-      console.log(isColliding(nextRect, wall));
-      if (isColliding(nextRect, wall)) return;
+      if (isColliding(yRect, wall)) {
+        return;
+      }
     }
 
-    this.x = nextX;
     this.y = nextY;
   }
 }

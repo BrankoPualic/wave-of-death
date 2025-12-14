@@ -27,19 +27,25 @@ function app(): void {
 
   const enemy = new Zombie();
 
-const wall = {
-  x: 800,
-  y: 150,
-  width: 25,
-  height: 100,
-} as IEntityBox;
-const walls = [wall];
+const walls: IEntityBox[] = [
+  {
+    x: 800,
+    y: 150,
+    width: 25,
+    height: 100,
+  },
+];
 
 
 	function gameLoop() {
 	  canvas.clear();
   ctx.fillStyle = 'red';
-  ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+  for (const wall of walls)
+    ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+
+  // hitbox
+  ctx.strokeStyle = 'lime';
+  ctx.strokeRect(enemy.x, enemy.y, enemy.width, enemy.height);
 
   enemy.moveTo(
     {
