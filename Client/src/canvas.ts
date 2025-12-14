@@ -1,6 +1,9 @@
+import { Constants } from './constants.js';
+
 export class Canvas {
-  width = 1000;
-  height = 750;
+  width = Constants.CANVAS_WIDTH;
+  height = Constants.CAVNAS_HEIGHT;
+  private ctx: CanvasRenderingContext2D;
   private _ctx: CanvasRenderingContext2D;
 
   constructor() {
