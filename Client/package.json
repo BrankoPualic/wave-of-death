@@ -1,0 +1,29 @@
+{
+  "name": "wave-of-death",
+  "version": "1.0.0",
+  "description": "MVP",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "watch": "tsc --watch",
+    "serve": "live-server",
+    "start": "start tsc --watch && start live-server",
+    "eslint": "npx eslint .\\src\\.",
+    "prettier-check": "npx prettier .\\src\\. --check",
+    "prettier-write": "npx prettier .\\src\\. --write",
+    "stage-code": "npx prettier .\\src\\. --write && npx eslint .\\src\\."
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.2",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
+    "prettier": "3.7.4",
+    "typescript": "^5.9.3",
+    "typescript-eslint": "^8.49.0"
+  }
+}
