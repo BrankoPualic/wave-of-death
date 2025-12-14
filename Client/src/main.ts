@@ -1,7 +1,7 @@
 import { Canvas } from './canvas.js';
 import { Player } from './entities/player.js';
+import { Entity } from './entities/entity.js';
 import { Game } from './game.js';
-import { IEntityBox } from './interfaces/entity-box-interface.js';
 import { IPosition } from './interfaces/position-interface.js';
 import { Zombie } from './zombies/zombie.js';
 
@@ -27,14 +27,7 @@ function app(): void {
 
   const enemy = new Zombie();
 
-  const walls: IEntityBox[] = [
-    {
-      x: 800,
-      y: 150,
-      width: 25,
-      height: 100,
-    },
-  ];
+  const walls: Entity[] = [new Entity(800, 150, 25, 100)];
 
   function gameLoop() {
     canvas.clear();

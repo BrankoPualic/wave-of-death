@@ -1,4 +1,5 @@
-import { isColliding } from '../functions.js';
+import { Entity } from '../entities/entity.js';
+import { isColliding } from '../common/functions.js';
 import { IEntityBox } from '../interfaces/entity-box-interface.js';
 import { IPosition } from '../interfaces/position-interface.js';
 
@@ -11,7 +12,7 @@ export class Zombie {
 
   constructor() {}
 
-  moveTo(target: IPosition, walls: IEntityBox[]) {
+  moveTo(target: IPosition, walls: Entity[]) {
     // distance from target poistion and entity
     const dx = target.x - this.x;
     const dy = target.y - this.y;
@@ -27,12 +28,7 @@ export class Zombie {
     // TRY X MOVE
     const nextX = this.x + dirX * this.speed;
 
-    const xRect: IEntityBox = {
-      x: nextX,
-      y: this.y,
-      width: this.width,
-      height: this.height,
-    };
+    const xRect = new Entity(nextX, this.y, this.width, this.height);
 
     let xBlocked = false;
     for (const wall of walls) {
@@ -49,12 +45,7 @@ export class Zombie {
     // TRY Y MOVE
     const nextY = this.y + dirY * this.speed;
 
-    const yRect: IEntityBox = {
-      x: this.x,
-      y: nextY,
-      width: this.width,
-      height: this.height,
-    };
+    const yRect = new Entity(this.x, nextY, this.width, this.height);
 
     for (const wall of walls) {
       if (isColliding(yRect, wall)) {
