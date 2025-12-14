@@ -7,6 +7,7 @@ export class Player extends Entity {
   private _image?: HTMLImageElement;
 
   private _keys = new Set<string>();
+  private _facing: 'left' | 'right' = 'right';
 
   constructor(x?: number, y?: number, width?: number, height?: number) {
     super(x, y, width, height);
@@ -57,11 +58,26 @@ export class Player extends Entity {
       vy *= inv;
     }
 
+    if (vx < 0) this._facing = 'left';
+    else if (vx > 0) this._facing = 'right';
+
     this.x += vx * this._speed;
     this.y += vy * this._speed;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
-    ctx.drawImage(this._image!, this.x, this.y, this.width, this.height);
+    if (!this._image) return;
+
+    ctx.save();
+
+    if (this._facing === 'left') {
+      ctx.translate(this.x + this.width, this.y);
+      ctx.scale(-1, 1);
+      ctx.drawImage(this._image, 0, 0, this.width, this.height);
+    } else {
+      ctx.drawImage(this._image, this.x, this.y, this.width, this.height);
+    }
+
+    ctx.restore();
   }
 }
