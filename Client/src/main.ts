@@ -1,5 +1,6 @@
 import { Canvas } from './canvas.js';
 import { Player } from './entities/player.js';
+import { drawHitbox } from './common/functions.js';
 import { Entity } from './entities/entity.js';
 import { Game } from './game.js';
 import { IPosition } from './interfaces/position-interface.js';
@@ -25,19 +26,20 @@ function app(): void {
     gameLoop();
   });
 
-  const enemy = new Zombie();
+  const enemy = new Zombie(900, 50);
+  const enemy2 = new Zombie(100, 100);
 
   const walls: Entity[] = [new Entity(800, 150, 25, 100)];
 
   function gameLoop() {
     canvas.clear();
+
     ctx.fillStyle = 'red';
     for (const wall of walls)
       ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
 
     // hitbox
-    ctx.strokeStyle = 'lime';
-    ctx.strokeRect(enemy.x, enemy.y, enemy.width, enemy.height);
+    drawHitbox(ctx, enemy);
 
     enemy.moveTo(
       {
@@ -49,6 +51,7 @@ function app(): void {
     );
 
     ctx.drawImage(enemyImg, enemy.x, enemy.y, enemy.width, enemy.height);
+    ctx.drawImage(enemyImg, enemy2.x, enemy2.y, enemy2.width, enemy2.height);
 
     requestAnimationFrame(gameLoop);
   }

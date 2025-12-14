@@ -1,16 +1,13 @@
-import { Entity } from '../entities/entity.js';
 import { isColliding } from '../common/functions.js';
-import { IEntityBox } from '../interfaces/entity-box-interface.js';
+import { Entity } from '../entities/entity.js';
 import { IPosition } from '../interfaces/position-interface.js';
 
-export class Zombie {
-  x = 900;
-  y = 50;
-  readonly width = 50;
-  readonly height = 50;
+export class Zombie extends Entity {
   readonly speed = 4;
 
-  constructor() {}
+  constructor(x: number, y: number) {
+    super(x, y);
+  }
 
   moveTo(target: IPosition, walls: Entity[]) {
     // distance from target poistion and entity

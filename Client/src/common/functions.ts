@@ -12,3 +12,12 @@ export function isColliding(
     nextRect.y + nextRect.height > wall.y
   );
 }
+
+export function drawHitbox(
+  ctx: CanvasRenderingContext2D,
+  entity: Entity,
+  stroke: string = 'lime',
+) {
+  ctx.strokeStyle = stroke;
+  ctx.strokeRect(entity.x, entity.y, entity.width, entity.height);
+}
