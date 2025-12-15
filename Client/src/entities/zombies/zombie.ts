@@ -8,6 +8,8 @@ export class Zombie extends Entity {
   private readonly _speed = 2;
   private readonly _imgSrc = 'assets/mvp-normal-zombie.png';
   private _image?: HTMLImageElement;
+  private _HP = 100;
+  private _DMG = 5;
 
   private _walls: Entity[] = [new Entity(800, 150, 25, 100)];
 
@@ -27,6 +29,8 @@ export class Zombie extends Entity {
 
   draw(ctx: CanvasRenderingContext2D) {
     if (!this._image) return;
+
+    if (this._HP <= 0) return;
 
     ctx.drawImage(this._image!, this.x, this.y, this.width, this.height);
   }
@@ -91,4 +95,10 @@ export class Zombie extends Entity {
 
     this.y = nextY;
   }
+
+  loseHP(deltaTime: number) {
+    this._HP -= 20 * deltaTime; // 20 hp per second
+  }
+
+  isAlive = () => this._HP > 0;
 }
