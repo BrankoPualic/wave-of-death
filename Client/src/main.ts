@@ -13,6 +13,12 @@ function app(): void {
   const player = new Player(0, 0);
   player.load(canvas);
 
+const image = new Image();
+image.src = "./assets/pistol.png";
+
+image.onload = () => {
+  ctx.drawImage(image, 200, 200, 80, 80);
+}
   const game = new Game(ctx, player, canvas);
   game.start();
 }
