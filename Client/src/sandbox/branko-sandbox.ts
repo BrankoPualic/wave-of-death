@@ -1,5 +1,5 @@
 import { Canvas } from '../canvas.js';
-import { SandboxGameObrad } from './sandbox-game-obrad.js';
+import { SandboxGameBranko } from './branko-sandbox-game.js';
 
 window.addEventListener('load', () => {
   app();
@@ -9,6 +9,6 @@ function app(): void {
   const canvas = new Canvas();
   const ctx = canvas.getContext();
 
-  const game = new SandboxGameObrad(ctx, canvas);
+  const game = new SandboxGameBranko(ctx, canvas);
   game.start();
 }
