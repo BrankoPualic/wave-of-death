@@ -7,15 +7,19 @@ import { IPosition } from '../../interfaces/position-interface.js';
 export class Zombie extends Entity {
   private readonly _imgSrc = 'assets/mvp-normal-zombie.png';
   private _image?: HTMLImageElement;
-  private _speed = 2;
+  private _speed = 100; // units per second
   private _HP = 100;
   private _DMG = 5;
+  
+  private _attackTimer = 0;
+  private _attackSpeed = 1; // attacks per second
+  private readonly _MIN_ATTACK_INTERVAL = 0.5; // seconds
 
   private _walls: Entity[] = [new Entity(800, 150, 25, 100)];
 
   constructor(x: number, y: number) {
     super(x, y);
-    this._speed = Math.random() * (4 - 2) + 2;
+    this._speed = Math.random() * (300 - 100) + 100;
   }
 
   load(canvas: Canvas) {
@@ -36,12 +40,15 @@ export class Zombie extends Entity {
     ctx.drawImage(this._image!, this.x, this.y, this.width, this.height);
   }
 
-  update(ctx: CanvasRenderingContext2D, player: Player) {
+  update(ctx: CanvasRenderingContext2D, player: Player, deltaTime: number) {
     ctx.fillStyle = 'red';
     ctx.fillRect(this._walls[0].x, this._walls[0].y, this._walls[0].width, this._walls[0].height);
 
     // hitbox
     drawHitbox(ctx, this);
+
+    if (!player.isAlive())
+      return;
 
     this.moveToPlayer(
       {
@@ -49,10 +56,28 @@ export class Zombie extends Entity {
         y: player.y,
       } as IPosition,
       this._walls,
+      deltaTime
     );
+
+    // if (distance > attackRange) {
+    //   move();
+    // } else {
+    //   stopAndAttack();
+    // }
+
+    this._attackTimer += deltaTime;
+    if (isColliding(this, player)) {
+      // if attack interval is 1 second, the player will take dmg only once a second
+      if (this._attackTimer >= this.attackInterval) {
+        player.takeDamage(this._DMG);
+        this._attackTimer = 0;
+      }
+    } else {
+      this._attackTimer = Math.min(this._attackTimer, this.attackInterval);
+    }
   }
 
-  moveToPlayer(target: IPosition, walls: Entity[]) {
+  moveToPlayer(target: IPosition, walls: Entity[], deltaTime: number) {
     // distance from target poistion and entity
     const dx = target.x - this.x;
     const dy = target.y - this.y;
@@ -70,7 +95,7 @@ export class Zombie extends Entity {
     const dirY = dy / distance;
 
     // TRY X MOVE
-    const nextX = this.x + dirX * this._speed;
+    const nextX = this.x + dirX * this._speed * deltaTime;
 
     const xRect = new Entity(nextX, this.y, this.width, this.height);
 
@@ -87,7 +112,7 @@ export class Zombie extends Entity {
     }
 
     // TRY Y MOVE
-    const nextY = this.y + dirY * this._speed;
+    const nextY = this.y + dirY * this._speed * deltaTime;
 
     const yRect = new Entity(this.x, nextY, this.width, this.height);
 
@@ -105,4 +130,9 @@ export class Zombie extends Entity {
   }
 
   isAlive = () => this._HP > 0;
+
+  private get attackInterval() {
+    const interval = 1 / this._attackSpeed;
+    return Math.max(interval, this._MIN_ATTACK_INTERVAL);
+  }
 }

@@ -26,11 +26,11 @@ export class Game {
 
     this.canvas.clear();
     this.canvas.load();
-    this.player.update();
+    this.player.update(deltaTime);
     this.player.draw(this.ctx);
 
     if (this.zombie.isAlive()) {
-      this.zombie.update(this.ctx, this.player);
+      this.zombie.update(this.ctx, this.player, deltaTime);
       this.zombie.draw(this.ctx);
       // this.zombie.loseHP(deltaTime);
     }
