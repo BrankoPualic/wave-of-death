@@ -2,9 +2,10 @@ import { Canvas } from '../canvas.js';
 import { Entity } from './entity.js';
 
 export class Player extends Entity {
-  private _speed = 5;
   private readonly _imgSrc = 'assets/player.png';
   private _image?: HTMLImageElement;
+  private _speed = 300;
+  private _HP = 50;
 
   private _keys = new Set<string>();
   private _facing: 'left' | 'right' = 'right';
@@ -42,7 +43,7 @@ export class Player extends Entity {
     player._keys.delete(e.code);
   }
 
-  update(): void {
+  update(deltaTime: number): void {
     let vx = 0;
     let vy = 0;
 
@@ -61,8 +62,8 @@ export class Player extends Entity {
     if (vx < 0) this._facing = 'left';
     else if (vx > 0) this._facing = 'right';
 
-    this.x += vx * this._speed;
-    this.y += vy * this._speed;
+    this.x += vx * this._speed * deltaTime;
+    this.y += vy * this._speed * deltaTime;
   }
 
   draw(ctx: CanvasRenderingContext2D): void {
@@ -80,4 +81,10 @@ export class Player extends Entity {
 
     ctx.restore();
   }
+
+  takeDamage(dmg: number) {
+    this._HP -= dmg;
+  }
+
+  isAlive = () => this._HP > 0;
 }
