@@ -9,7 +9,7 @@ export class Zombie extends Entity {
   private _speed = 100; // units per second
   private _HP = 100;
   private _DMG = 20;
-  private _attackRange = 35;
+  private _attackRange = 45;
 
   private _attackTimer = 0;
   private _attackSpeed = 1; // attacks per second
