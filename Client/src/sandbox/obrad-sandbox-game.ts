@@ -5,18 +5,23 @@ import { Zombie } from '../entities/zombies/zombie.js';
 export class SandboxGameObrad {
   private _lastTime: number = 0; // in miliseconds
 
-  private _player: Player;
+  private _player: Player = new Player(0, 0);
   private _zombies: Zombie[] = [];
+
+  isGameOver = false;
 
   constructor(
     private ctx: CanvasRenderingContext2D,
     private canvas: Canvas,
   ) {
-    this._player = new Player(0, 0);
-    this._player.load(canvas);
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this.isGameOver && e.code === 'Backspace') {
+        this.init(this.canvas);
+        requestAnimationFrame(this.loop);
+      }
+    });
 
-    this._zombies.push(new Zombie(900, 50), new Zombie(100, 100));
-    this._zombies.forEach((zombie) => zombie.load(canvas));
+    this.init(canvas);
   }
 
   start() {
@@ -38,6 +43,8 @@ export class SandboxGameObrad {
     if (this._player.isAlive()) {
       this._player.update(deltaTime);
       this._player.draw(this.ctx);
+    } else {
+      this.isGameOver = true;
     }
 
     this._zombies.forEach((zombie) => {
@@ -50,4 +57,19 @@ export class SandboxGameObrad {
 
     requestAnimationFrame(this.loop);
   };
+
+  init(canvas: Canvas) {
+    this._player = new Player(0, 0);
+    this._player.load(canvas);
+
+    this._zombies = [
+      new Zombie(900, 50),
+      new Zombie(100, 100),
+      new Zombie(10, 700),
+      new Zombie(200, 0),
+    ];
+    this._zombies.forEach((zombie) => zombie.load(canvas));
+
+    this.isGameOver = false;
+  }
 }
