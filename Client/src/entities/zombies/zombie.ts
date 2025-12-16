@@ -2,7 +2,6 @@ import { Canvas } from '../../canvas.js';
 import { drawHitbox, isColliding } from '../../common/functions.js';
 import { Entity } from '../entity.js';
 import { Player } from '../player.js';
-import { IPosition } from '../../interfaces/position-interface.js';
 
 export class Zombie extends Entity {
   private readonly _imgSrc = 'assets/mvp-normal-zombie.png';
@@ -43,13 +42,17 @@ export class Zombie extends Entity {
 
   update(ctx: CanvasRenderingContext2D, player: Player, deltaTime: number) {
     ctx.fillStyle = 'red';
-    ctx.fillRect(this._walls[0].x, this._walls[0].y, this._walls[0].width, this._walls[0].height);
+    ctx.fillRect(
+      this._walls[0].x,
+      this._walls[0].y,
+      this._walls[0].width,
+      this._walls[0].height,
+    );
 
     // hitbox
     drawHitbox(ctx, this);
 
-    if (!player.isAlive())
-      return;
+    if (!player.isAlive()) return;
 
     // distance from target poistion and entity
     const dx = player.x - this.x;
@@ -63,7 +66,7 @@ export class Zombie extends Entity {
     if (distance > this._attackRange) {
       const dirX = dx / distance;
       const dirY = dy / distance;
-      this.move(dirX, dirY, deltaTime,  this._walls);
+      this.move(dirX, dirY, deltaTime, this._walls);
     } else {
       this.stopAndAttack(deltaTime, player);
     }
@@ -104,7 +107,8 @@ export class Zombie extends Entity {
   stopAndAttack(deltaTime: number, player: Player) {
     this._attackTimer += deltaTime;
 
-    if (this._attackTimer >= this.attackInterval) { // if attack interval is 1 second, the player will take dmg only once a second
+    if (this._attackTimer >= this.attackInterval) {
+      // if attack interval is 1 second, the player will take dmg only once a second
       player.takeDamage(this._DMG);
       this._attackTimer = 0;
     }

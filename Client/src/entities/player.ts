@@ -6,7 +6,7 @@ export class Player extends Entity {
   private _image?: HTMLImageElement;
   private _speed = 300;
   private _HP = 50;
-  
+
   private _keys = new Set<string>();
   private _facing: 'left' | 'right' = 'right';
 

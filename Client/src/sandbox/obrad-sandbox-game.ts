@@ -15,11 +15,8 @@ export class SandboxGameObrad {
     this._player = new Player(0, 0);
     this._player.load(canvas);
 
-    this._zombies.push(
-      new Zombie(900, 50),
-      new Zombie(100, 100),
-    );
-    this._zombies.forEach(zombie => zombie.load(canvas));
+    this._zombies.push(new Zombie(900, 50), new Zombie(100, 100));
+    this._zombies.forEach((zombie) => zombie.load(canvas));
   }
 
   start() {
@@ -32,7 +29,7 @@ export class SandboxGameObrad {
 
   loop = (currentTime: number) => {
     // delta time = the amount of real time that passed between two frames
-    const deltaTime = (currentTime - this._lastTime) / 1000 // both times are in miliseconds, and we want seconds
+    const deltaTime = (currentTime - this._lastTime) / 1000; // both times are in miliseconds, and we want seconds
     this._lastTime = currentTime;
 
     this.canvas.clear();
@@ -43,13 +40,13 @@ export class SandboxGameObrad {
       this._player.draw(this.ctx);
     }
 
-    this._zombies.forEach(zombie => {
+    this._zombies.forEach((zombie) => {
       if (zombie.isAlive()) {
         zombie.update(this.ctx, this._player, deltaTime);
         zombie.draw(this.ctx);
         // zombie.loseHP(deltaTime);
       }
-    })
+    });
 
     requestAnimationFrame(this.loop);
   };

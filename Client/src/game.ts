@@ -16,7 +16,7 @@ export class Game {
     console.log('game started');
 
     this._lastTime = performance.now();
-    
+
     requestAnimationFrame(this.loop);
   }
 
