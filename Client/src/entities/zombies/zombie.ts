@@ -9,8 +9,9 @@ export class Zombie extends Entity {
   private _image?: HTMLImageElement;
   private _speed = 100; // units per second
   private _HP = 100;
-  private _DMG = 5;
-  
+  private _DMG = 20;
+  private _attackRange = 35;
+
   private _attackTimer = 0;
   private _attackSpeed = 1; // attacks per second
   private readonly _MIN_ATTACK_INTERVAL = 0.5; // seconds
@@ -50,50 +51,25 @@ export class Zombie extends Entity {
     if (!player.isAlive())
       return;
 
-    this.moveToPlayer(
-      {
-        x: player.x,
-        y: player.y,
-      } as IPosition,
-      this._walls,
-      deltaTime
-    );
-
-    // if (distance > attackRange) {
-    //   move();
-    // } else {
-    //   stopAndAttack();
-    // }
-
-    this._attackTimer += deltaTime;
-    if (isColliding(this, player)) {
-      // if attack interval is 1 second, the player will take dmg only once a second
-      if (this._attackTimer >= this.attackInterval) {
-        player.takeDamage(this._DMG);
-        this._attackTimer = 0;
-      }
-    } else {
-      this._attackTimer = Math.min(this._attackTimer, this.attackInterval);
-    }
-  }
-
-  moveToPlayer(target: IPosition, walls: Entity[], deltaTime: number) {
     // distance from target poistion and entity
-    const dx = target.x - this.x;
-    const dy = target.y - this.y;
+    const dx = player.x - this.x;
+    const dy = player.y - this.y;
 
     // vector
     const distance = Math.hypot(dx, dy);
 
     if (distance < 1) return; // this is to prevent the bug for division by zero, also jitter
 
-    if (distance <= this.width * 0.7) { // if touches player stop
-      return;
+    if (distance > this._attackRange) {
+      const dirX = dx / distance;
+      const dirY = dy / distance;
+      this.move(dirX, dirY, deltaTime,  this._walls);
+    } else {
+      this.stopAndAttack(deltaTime, player);
     }
+  }
 
-    const dirX = dx / distance;
-    const dirY = dy / distance;
-
+  move(dirX: number, dirY: number, deltaTime: number, walls: Entity[]) {
     // TRY X MOVE
     const nextX = this.x + dirX * this._speed * deltaTime;
 
@@ -123,6 +99,15 @@ export class Zombie extends Entity {
     }
 
     this.y = nextY;
+  }
+
+  stopAndAttack(deltaTime: number, player: Player) {
+    this._attackTimer += deltaTime;
+
+    if (this._attackTimer >= this.attackInterval) { // if attack interval is 1 second, the player will take dmg only once a second
+      player.takeDamage(this._DMG);
+      this._attackTimer = 0;
+    }
   }
 
   loseHP(deltaTime: number) {
