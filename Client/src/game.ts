@@ -16,6 +16,7 @@ export class Game {
     console.log('game started');
 
     this._lastTime = performance.now();
+    
     requestAnimationFrame(this.loop);
   }
 
@@ -31,7 +32,7 @@ export class Game {
     if (this.zombie.isAlive()) {
       this.zombie.update(this.ctx, this.player);
       this.zombie.draw(this.ctx);
-      this.zombie.loseHP(deltaTime);
+      // this.zombie.loseHP(deltaTime);
     }
 
     requestAnimationFrame(this.loop);

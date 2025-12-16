@@ -5,9 +5,9 @@ import { Player } from '../player.js';
 import { IPosition } from '../../interfaces/position-interface.js';
 
 export class Zombie extends Entity {
-  private readonly _speed = 2;
   private readonly _imgSrc = 'assets/mvp-normal-zombie.png';
   private _image?: HTMLImageElement;
+  private _speed = 2;
   private _HP = 100;
   private _DMG = 5;
 
@@ -15,6 +15,7 @@ export class Zombie extends Entity {
 
   constructor(x: number, y: number) {
     super(x, y);
+    this._speed = Math.random() * (4 - 2) + 2;
   }
 
   load(canvas: Canvas) {
@@ -37,13 +38,12 @@ export class Zombie extends Entity {
 
   update(ctx: CanvasRenderingContext2D, player: Player) {
     ctx.fillStyle = 'red';
-    for (const wall of this._walls)
-      ctx.fillRect(wall.x, wall.y, wall.width, wall.height);
+    ctx.fillRect(this._walls[0].x, this._walls[0].y, this._walls[0].width, this._walls[0].height);
 
     // hitbox
     drawHitbox(ctx, this);
 
-    this.moveTo(
+    this.moveToPlayer(
       {
         x: player.x,
         y: player.y,
@@ -52,7 +52,7 @@ export class Zombie extends Entity {
     );
   }
 
-  moveTo(target: IPosition, walls: Entity[]) {
+  moveToPlayer(target: IPosition, walls: Entity[]) {
     // distance from target poistion and entity
     const dx = target.x - this.x;
     const dy = target.y - this.y;
@@ -61,6 +61,10 @@ export class Zombie extends Entity {
     const distance = Math.hypot(dx, dy);
 
     if (distance < 1) return; // this is to prevent the bug for division by zero, also jitter
+
+    if (distance <= this.width * 0.7) { // if touches player stop
+      return;
+    }
 
     const dirX = dx / distance;
     const dirY = dy / distance;

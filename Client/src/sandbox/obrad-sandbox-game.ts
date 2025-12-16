@@ -24,6 +24,9 @@ export class SandboxGameObrad {
 
   start() {
     console.log('sandbox started');
+
+    this._lastTime = performance.now();
+
     requestAnimationFrame(this.loop);
   }
 
@@ -41,10 +44,10 @@ export class SandboxGameObrad {
       if (zombie.isAlive()) {
         zombie.update(this.ctx, this._player);
         zombie.draw(this.ctx);
-        zombie.loseHP(deltaTime);
+        // zombie.loseHP(deltaTime);
       }
     })
-    
+
     requestAnimationFrame(this.loop);
   };
 }
