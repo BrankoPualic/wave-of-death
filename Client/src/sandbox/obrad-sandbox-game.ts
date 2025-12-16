@@ -43,8 +43,6 @@ export class SandboxGameObrad {
     if (this._player.isAlive()) {
       this._player.update(deltaTime);
       this._player.draw(this.ctx);
-    } else {
-      this.isGameOver = true;
     }
 
     this._zombies.forEach((zombie) => {
@@ -54,6 +52,11 @@ export class SandboxGameObrad {
         // zombie.loseHP(deltaTime);
       }
     });
+
+    if (!this._player.isAlive()) {
+      this.isGameOver = true;
+      this.gameOverMessage(currentTime);
+    }
 
     requestAnimationFrame(this.loop);
   };
@@ -71,5 +74,40 @@ export class SandboxGameObrad {
     this._zombies.forEach((zombie) => zombie.load(canvas));
 
     this.isGameOver = false;
+  }
+
+  gameOverMessage(currentTime: number) {
+    this.ctx.fillStyle = 'rgba(114, 114, 114, 0.7)';
+    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+    this.ctx.save(); // save the current context state
+
+    this.ctx.translate(this.canvas.width / 2, this.canvas.height / 2);
+    this.ctx.textAlign = 'center';
+    this.ctx.textBaseline = 'middle';
+
+    this.ctx.font = '24px Arial sans-serif';
+    this.ctx.fillStyle = 'white';
+    this.ctx.fillText("Click 'Backspace' button to restart the game!", 0, this.canvas.height / 2 - 50);
+
+    // pulsating effect
+    const scale = 1 + 0.1 * Math.sin(currentTime / 300); // 0.9 - 1.1 scale
+    this.ctx.scale(scale, scale);
+
+    // shadow
+    this.ctx.shadowColor = 'black';
+    this.ctx.shadowBlur = 10;
+    this.ctx.shadowOffsetX = 0;
+    this.ctx.shadowOffsetY = 0;
+
+    this.ctx.font = 'bold 78px Arial sans-serif';
+    this.ctx.fillStyle = 'red';
+    this.ctx.fillText('GAME OVER', 0, 0);
+
+    this.ctx.strokeStyle = 'white';
+    this.ctx.lineWidth = 2;
+    this.ctx.strokeText('GAME OVER', 0, 0);
+
+    this.ctx.restore(); // restor the context (remove the styles and updates for other text that comes after this "game over")
   }
 }
