@@ -88,7 +88,11 @@ export class SandboxGameObrad {
 
     this.ctx.font = '24px Arial sans-serif';
     this.ctx.fillStyle = 'white';
-    this.ctx.fillText("Click 'Backspace' button to restart the game!", 0, this.canvas.height / 2 - 50);
+    this.ctx.fillText(
+      "Click 'Backspace' button to restart the game!",
+      0,
+      this.canvas.height / 2 - 50,
+    );
 
     // pulsating effect
     const scale = 1 + 0.1 * Math.sin(currentTime / 300); // 0.9 - 1.1 scale

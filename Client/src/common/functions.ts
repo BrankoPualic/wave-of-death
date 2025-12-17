@@ -1,5 +1,6 @@
 import { Entity } from '../entities/entity';
 import { IEntityBox } from '../interfaces/entity-box-interface';
+import { Constants } from './constants.js';
 
 export function isColliding(
   nextRect: IEntityBox | Entity,
@@ -20,4 +21,8 @@ export function drawHitbox(
 ) {
   ctx.strokeStyle = stroke;
   ctx.strokeRect(entity.x, entity.y, entity.width, entity.height);
+}
+
+export function getFont(size: number, bold?: boolean, font?: string): string {
+  return `${bold ? 'bold' : ''} ${size}px ${font ? font : Constants.FONTFAMILIY}`;
 }
