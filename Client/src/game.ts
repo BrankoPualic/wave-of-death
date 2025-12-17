@@ -8,10 +8,19 @@ export class Game {
   private _player!: Player;
   private _zombies: Zombie[] = [];
 
+  isGameOver = false;
+
   constructor(
     private canvas: Canvas,
     private ctx: CanvasRenderingContext2D,
   ) {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this.isGameOver && e.code === 'Backspace') {
+        this.init();
+        requestAnimationFrame(this.loop);
+      }
+    });
+
     this.init();
   }
 
@@ -59,7 +68,12 @@ export class Game {
   }
 
   private loadZombies(): void {
-    this._zombies.push(new Zombie(900, 50), new Zombie(100, 100));
+    this._zombies = [
+      new Zombie(900, 50),
+      new Zombie(100, 100),
+      new Zombie(10, 700),
+      new Zombie(200, 0),
+    ];
     this._zombies.forEach((zombie) => zombie.load(this.canvas));
   }
 }
