@@ -59,6 +59,16 @@ export class Game {
 
     createObstacles(this._world);
     const player = createPlayer(this._world, this.canvas);
+
+    const cameraEntity = this._world.createEntity();
+    this._world.cameras.set(cameraEntity, {
+      x: 0,
+      y: 0,
+      width: this.canvas.width,
+      height: this.canvas.height,
+      follow: player,
+    });
+
     createZombies(this._world, player, 4);
   }
 
