@@ -11,6 +11,6 @@ function app(): void {
   const canvas = new Canvas();
   const ctx = canvas.getContext();
 
-  const game = new SandboxGameObrad(ctx, canvas);
+  const game = new SandboxGameObrad(canvas, ctx);
   game.start();
 }

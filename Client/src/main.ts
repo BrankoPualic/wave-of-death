@@ -1,6 +1,8 @@
 import { Canvas } from './canvas.js';
 import { Game } from './game.js';
 
+// No ECS here
+// Just bootstrapping app
 window.addEventListener('load', () => {
   app();
 });

@@ -1,6 +1,6 @@
-import { IPosition } from './position-interface';
-
-export interface IEntityBox extends IPosition {
+export interface IEntityBox {
+  x: number;
+  y: number;
   width: number;
   height: number;
 }

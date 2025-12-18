@@ -1,6 +1,5 @@
 import { TEntity } from '../ecs/entity';
 import { World } from '../ecs/world';
-import { Entity } from '../entities/entity';
 import { IEntityBox } from '../interfaces/entity-box-interface';
 import { Constants } from './constants.js';
 
@@ -9,8 +8,8 @@ import { Constants } from './constants.js';
 //
 
 export function isColliding(
-  nextRect: IEntityBox | Entity,
-  obstacle: IEntityBox | Entity,
+  nextRect: IEntityBox,
+  obstacle: IEntityBox,
 ): boolean {
   return (
     nextRect.x < obstacle.x + obstacle.width &&
@@ -98,7 +97,7 @@ export function tryMoveEntity(
 
 export function drawHitbox(
   ctx: CanvasRenderingContext2D,
-  entity: Entity,
+  entity: IEntityBox,
   stroke: string = 'lime',
 ): void {
   ctx.strokeStyle = stroke;

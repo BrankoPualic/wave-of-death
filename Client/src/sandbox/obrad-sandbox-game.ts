@@ -15,8 +15,8 @@ export class SandboxGameObrad {
   private _world: World;
 
   constructor(
-    private ctx: CanvasRenderingContext2D,
     private canvas: Canvas,
+    private ctx: CanvasRenderingContext2D,
   ) {
     this._world = new World();
     this.eventsInit(this._world);
