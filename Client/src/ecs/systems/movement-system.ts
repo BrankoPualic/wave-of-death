@@ -2,11 +2,11 @@ import { tryMoveEntity } from '../../common/functions.js';
 import { World } from '../world.js';
 
 export function playerMovementSystem(world: World, deltaTime: number) {
-  world.players.forEach((entity) => {
-    const position = world.positions.get(entity);
-    const velocity = world.velocities.get(entity);
-    const input = world.inputs.get(entity);
-    const facing = world.facings.get(entity);
+  world.players.forEach((player) => {
+    const position = world.positions.get(player);
+    const velocity = world.velocities.get(player);
+    const input = world.inputs.get(player);
+    const facing = world.facings.get(player);
 
     if (!position || !velocity || !input || !facing) return;
 
@@ -30,7 +30,7 @@ export function playerMovementSystem(world: World, deltaTime: number) {
 
     tryMoveEntity(
       world,
-      entity,
+      player,
       vx * velocity.speed * deltaTime,
       vy * velocity.speed * deltaTime,
     );

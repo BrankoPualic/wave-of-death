@@ -13,6 +13,7 @@ export function createZombies(world: World, player: TEntity, count: number) {
 
     world.velocities.set(zombie, { speed: Math.random() * (300 - 100) + 100 });
     world.healths.set(zombie, { hp: 100 });
+    world.facings.set(zombie, { direction: 'right' });
 
     const image = world.images.get('zombie');
     world.sprites.set(zombie, {

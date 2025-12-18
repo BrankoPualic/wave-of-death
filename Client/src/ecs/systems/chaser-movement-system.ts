@@ -12,6 +12,7 @@ export function chaserMovementSystem(world: World, deltaTime: number) {
     const velocity = world.velocities.get(zombie);
     const sprite = world.sprites.get(zombie);
     const attack = world.attacks.get(zombie);
+    const facing = world.facings.get(zombie);
 
     if (
       !targetPosition ||
@@ -19,13 +20,17 @@ export function chaserMovementSystem(world: World, deltaTime: number) {
       !position ||
       !velocity ||
       !sprite ||
-      !attack
+      !attack ||
+      !facing
     )
       return;
 
     // distance from target position and entity
     const dx = targetPosition.x - position.x;
     const dy = targetPosition.y - position.y;
+
+    if (dx < 0) facing.direction = 'left';
+    else facing.direction = 'right';
 
     // vector
     const distance = Math.hypot(dx, dy);
