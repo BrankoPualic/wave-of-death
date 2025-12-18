@@ -6,9 +6,6 @@ import { World } from '../ecs/world';
 export function createPlayer(world: World, canvas: Canvas): TEntity {
   const player = world.createEntity();
 
-  const image = new Image();
-  image.src = 'assets/player.png';
-
   world.positions.set(player, {
     x: canvas.width / 2 - Constants.BASE_CHARACTER_WIDTH / 2,
     y: canvas.height / 2 - Constants.BASE_CHARACTER_HEIGHT / 2,
@@ -19,6 +16,7 @@ export function createPlayer(world: World, canvas: Canvas): TEntity {
   world.inputs.set(player, { keys: new Set() });
   world.facings.set(player, { direction: 'right' });
 
+  const image = world.images.get('player');
   world.sprites.set(player, {
     image,
     width: Constants.BASE_CHARACTER_WIDTH,

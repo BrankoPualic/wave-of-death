@@ -8,7 +8,7 @@ import { IInput } from './components/input';
 import { IPosition } from './components/position';
 import { ISprite } from './components/sprite';
 import { IVelocity } from './components/velocity';
-import { TEntity } from './entity';
+import { TEntity, TEntityGroup } from './entity';
 import { attackSystem } from './systems/attack-system.js';
 import { backgroundSystem } from './systems/background-system.js';
 import { chaserMovementSystem } from './systems/chaser-movement-system.js';
@@ -21,6 +21,8 @@ import { renderSystem } from './systems/render-system.js';
 // - runs systems in order
 export class World {
   private _nextEntityId: TEntity = 0;
+
+  images = new Map<TEntityGroup, HTMLImageElement>();
 
   // Stores
 
@@ -40,6 +42,10 @@ export class World {
   players = new Set<TEntity>();
   zombies = new Set<TEntity>();
   obstacles = new Set<TEntity>();
+
+  constructor() {
+    this.loadImages();
+  }
 
   // Methods
 
@@ -72,5 +78,19 @@ export class World {
     this.obstacles.clear();
 
     this._nextEntityId = 0;
+  }
+
+  // Image load
+
+  private loadImages(): void {
+    // Player
+    let image = new Image();
+    image.src = 'assets/player.png';
+    this.images.set('player', image);
+
+    // Zombie
+    image = new Image();
+    image.src = 'assets/mvp-normal-zombie.png';
+    this.images.set('zombie', image);
   }
 }

@@ -3,9 +3,6 @@ import { TEntity } from '../../ecs/entity';
 import { World } from '../../ecs/world';
 
 export function createZombies(world: World, player: TEntity, count: number) {
-  const image = new Image();
-  image.src = 'assets/mvp-normal-zombie.png';
-
   for (let i = 0; i < count; i++) {
     const zombie = world.createEntity();
 
@@ -17,6 +14,7 @@ export function createZombies(world: World, player: TEntity, count: number) {
     world.velocities.set(zombie, { speed: Math.random() * (300 - 100) + 100 });
     world.healths.set(zombie, { hp: 100 });
 
+    const image = world.images.get('zombie');
     world.sprites.set(zombie, {
       image,
       width: Constants.BASE_CHARACTER_WIDTH,
