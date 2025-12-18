@@ -34,8 +34,5 @@ export function playerMovementSystem(world: World, deltaTime: number) {
       vx * velocity.speed * deltaTime,
       vy * velocity.speed * deltaTime,
     );
-
-    // position.x += vx * velocity.speed * deltaTime;
-    // position.y += vy * velocity.speed * deltaTime;
   });
 }

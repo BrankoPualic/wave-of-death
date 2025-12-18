@@ -20,7 +20,12 @@ export function isColliding(
   );
 }
 
-export function getEntityBox(world: World, entity: TEntity, x?: number, y?: number): IEntityBox | null {
+export function getEntityBox(
+  world: World,
+  entity: TEntity,
+  x?: number,
+  y?: number,
+): IEntityBox | null {
   const pos = world.positions.get(entity);
   const spirte = world.sprites.get(entity);
   if (!pos || !spirte) return null;
@@ -33,24 +38,32 @@ export function getEntityBox(world: World, entity: TEntity, x?: number, y?: numb
   };
 }
 
-export function isBlockedByObstacles(world: World, mover: TEntity, nextBox: IEntityBox): boolean {
+export function isBlockedByObstacles(
+  world: World,
+  mover: TEntity,
+  nextBox: IEntityBox,
+): boolean {
   for (const obstacle of world.obstacles) {
     if (obstacle === mover) continue;
 
     const obstacleBox = getEntityBox(world, obstacle);
     if (!obstacleBox) continue;
 
-    if (isColliding(nextBox, obstacleBox))
-      return true;
+    if (isColliding(nextBox, obstacleBox)) return true;
   }
 
   return false;
 }
 
-export function tryMoveEntity(world: World, entity: TEntity, dx: number, dy: number) {
+export function tryMoveEntity(
+  world: World,
+  entity: TEntity,
+  dx: number,
+  dy: number,
+) {
   const pos = world.positions.get(entity);
   const sprite = world.sprites.get(entity);
-  if(!pos || !sprite) return;
+  if (!pos || !sprite) return;
 
   // TRY X
   if (dx !== 0) {
@@ -62,8 +75,7 @@ export function tryMoveEntity(world: World, entity: TEntity, dx: number, dy: num
       height: sprite.height,
     };
 
-    if (!isBlockedByObstacles(world, entity, boxX))
-      pos.x = nextX;
+    if (!isBlockedByObstacles(world, entity, boxX)) pos.x = nextX;
   }
 
   // TRY Y
@@ -76,12 +88,9 @@ export function tryMoveEntity(world: World, entity: TEntity, dx: number, dy: num
       height: sprite.height,
     };
 
-    if (!isBlockedByObstacles(world, entity, boxY))
-      pos.y = nextY;
+    if (!isBlockedByObstacles(world, entity, boxY)) pos.y = nextY;
   }
-
 }
-
 
 //
 // HELPERS
