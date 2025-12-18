@@ -9,6 +9,6 @@ function app(): void {
   const canvas = new Canvas();
   const ctx = canvas.getContext();
 
-  const game = new SandboxGameBranko(ctx, canvas);
+  const game = new SandboxGameBranko(canvas, ctx);
   game.start();
 }

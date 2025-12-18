@@ -33,7 +33,8 @@ export class Game {
 
   private loop = (currentTime: number) => {
     // delta time = the amount of real time that passed between two frames
-    const deltaTime = (currentTime - this._lastTime) / 1000; // both times are in milliseconds, and we want seconds
+    // both times are in milliseconds, and we want seconds
+    const deltaTime = (currentTime - this._lastTime) / 1000;
     this._lastTime = currentTime;
 
     this.canvas.clear();

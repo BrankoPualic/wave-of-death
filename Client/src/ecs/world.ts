@@ -1,5 +1,6 @@
 import { Canvas } from '../canvas';
 import { IAttack } from './components/attack';
+import { ICamera } from './components/camera';
 import { IChaser } from './components/chaser';
 import { IDamageable } from './components/damageable';
 import { IFacing } from './components/facing';
@@ -11,6 +12,7 @@ import { IVelocity } from './components/velocity';
 import { TEntity, TEntityGroup } from './entity';
 import { attackSystem } from './systems/attack-system.js';
 import { backgroundSystem } from './systems/background-system.js';
+import { cameraFollowSystem } from './systems/camera-follow-system.js';
 import { chaserMovementSystem } from './systems/chaser-movement-system.js';
 import { deathSystem } from './systems/death-system.js';
 import { playerMovementSystem } from './systems/movement-system.js';
@@ -21,6 +23,8 @@ import { renderSystem } from './systems/render-system.js';
 // - runs systems in order
 export class World {
   private _nextEntityId: TEntity = 0;
+  width: number;
+  height: number;
 
   images = new Map<TEntityGroup, HTMLImageElement>();
 
@@ -35,6 +39,7 @@ export class World {
   attacks = new Map<TEntity, IAttack>();
   chasers = new Map<TEntity, IChaser>();
   damageables = new Map<TEntity, IDamageable>();
+  cameras = new Map<TEntity, ICamera>();
 
   // Tags
 
@@ -44,6 +49,8 @@ export class World {
   obstacles = new Set<TEntity>();
 
   constructor() {
+    this.width = 2000;
+    this.height = 1000;
     this.loadImages();
   }
 
@@ -59,6 +66,7 @@ export class World {
     attackSystem(this, deltaTime);
     deathSystem(this);
 
+    cameraFollowSystem(this);
     renderSystem(this, ctx);
   }
 
@@ -72,6 +80,7 @@ export class World {
     this.attacks.clear();
     this.chasers.clear();
     this.damageables.clear();
+    this.cameras.clear();
 
     this.players.clear();
     this.zombies.clear();
