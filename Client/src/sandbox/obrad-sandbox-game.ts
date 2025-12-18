@@ -1,7 +1,7 @@
 import { Canvas } from '../canvas.js';
 import { gameOverSystem } from '../ecs/systems/game-over-system.js';
 import { World } from '../ecs/world.js';
-import { createObstacles } from '../entities/create-obstacles.js';
+import { createObstacles } from '../entities/collisions/create-obstacles.js';
 import { createPlayer } from '../entities/create-player.js';
 import { createZombies } from '../entities/zombies/create-zombies.js';
 

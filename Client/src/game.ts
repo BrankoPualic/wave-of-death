@@ -1,9 +1,10 @@
 import { Canvas } from './canvas.js';
 import { gameOverSystem } from './ecs/systems/game-over-system.js';
 import { World } from './ecs/world.js';
-import { createObstacles } from './entities/create-obstacles.js';
+import { createCamera } from './entities/create-camera.js';
+import { createObstacles } from './entities/collisions/create-obstacles.js';
 import { createPlayer } from './entities/create-player.js';
-import { createWorldBorders } from './entities/create-world-border.js';
+import { createWorldBorders } from './entities/collisions/create-world-border.js';
 import { createZombies } from './entities/zombies/create-zombies.js';
 
 // Game ONLY:
@@ -60,16 +61,9 @@ export class Game {
 
     createWorldBorders(this._world);
     createObstacles(this._world);
-    const player = createPlayer(this._world, this.canvas);
 
-    const cameraEntity = this._world.createEntity();
-    this._world.cameras.set(cameraEntity, {
-      x: 0,
-      y: 0,
-      width: this.canvas.width,
-      height: this.canvas.height,
-      follow: player,
-    });
+    const player = createPlayer(this._world, this.canvas);
+    createCamera(this._world, this.canvas, player);
 
     createZombies(this._world, player, 4);
   }

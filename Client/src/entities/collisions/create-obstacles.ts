@@ -1,4 +1,4 @@
-import { World } from '../ecs/world';
+import { World } from '../../ecs/world';
 
 export function createObstacles(world: World) {
   const obstacle = world.createEntity();
