@@ -1,82 +1,67 @@
 import { Canvas } from '../canvas.js';
-import { Player } from '../entities/player.js';
-import { Zombie } from '../entities/zombies/zombie.js';
+import { gameOverSystem } from '../ecs/systems/game-over-system.js';
+import { World } from '../ecs/world.js';
+import { createObstacles } from '../entities/create-obstacles.js';
+import { createPlayer } from '../entities/create-player.js';
+import { createZombies } from '../entities/zombies/create-zombies.js';
 
+// Game ONLY:
+// - manages time
+// - runs the loop
+// - calls World
 export class SandboxGameObrad {
-  private _lastTime: number = 0; // in miliseconds
-
-  private _player: Player = new Player(0, 0);
-  private _zombies: Zombie[] = [];
-
-  isGameOver = false;
+  private _lastTime: number = 0; // in milliseconds
+  private _isGameOver = false;
+  private _world: World;
 
   constructor(
     private ctx: CanvasRenderingContext2D,
     private canvas: Canvas,
   ) {
-    document.addEventListener('keydown', (e: KeyboardEvent) => {
-      if (this.isGameOver && e.code === 'Backspace') {
-        this.init(this.canvas);
-        requestAnimationFrame(this.loop);
-      }
-    });
-
-    this.init(canvas);
+    this._world = new World();
+    this.eventsInit(this._world);
   }
 
   start() {
     console.log('sandbox started');
+    this.init();
 
     this._lastTime = performance.now();
 
     requestAnimationFrame(this.loop);
   }
 
-  loop = (currentTime: number) => {
+  private loop = (currentTime: number) => {
     // delta time = the amount of real time that passed between two frames
-    const deltaTime = (currentTime - this._lastTime) / 1000; // both times are in miliseconds, and we want seconds
+    const deltaTime = (currentTime - this._lastTime) / 1000; // both times are in milliseconds, and we want seconds
     this._lastTime = currentTime;
 
     this.canvas.clear();
-    this.canvas.load();
 
-    if (this._player.isAlive()) {
-      this._player.update(deltaTime);
-      this._player.draw(this.ctx);
-    }
-
-    this._zombies.forEach((zombie) => {
-      if (zombie.isAlive()) {
-        zombie.update(this.ctx, this._player, deltaTime);
-        zombie.draw(this.ctx);
-        // zombie.loseHP(deltaTime);
+    this._world.update(deltaTime, this.ctx, this.canvas);
+    if (!this._isGameOver) {
+      if (gameOverSystem(this._world)) {
+        this._isGameOver = true;
+        this.drawGameOver(currentTime);
       }
-    });
-
-    if (!this._player.isAlive()) {
-      this.isGameOver = true;
-      this.gameOverMessage(currentTime);
+    } else {
+      this.drawGameOver(currentTime);
     }
 
     requestAnimationFrame(this.loop);
   };
 
-  init(canvas: Canvas) {
-    this._player = new Player(0, 0);
-    this._player.load(canvas);
+  private init() {
+    this._isGameOver = false;
 
-    this._zombies = [
-      new Zombie(900, 50),
-      new Zombie(100, 100),
-      new Zombie(10, 700),
-      new Zombie(200, 0),
-    ];
-    this._zombies.forEach((zombie) => zombie.load(canvas));
+    this._world.reset();
 
-    this.isGameOver = false;
+    createObstacles(this._world);
+    const player = createPlayer(this._world, this.canvas);
+    createZombies(this._world, player, 4);
   }
 
-  gameOverMessage(currentTime: number) {
+  private drawGameOver(currentTime: number) {
     this.ctx.fillStyle = 'rgba(114, 114, 114, 0.7)';
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -112,6 +97,22 @@ export class SandboxGameObrad {
     this.ctx.lineWidth = 2;
     this.ctx.strokeText('GAME OVER', 0, 0);
 
-    this.ctx.restore(); // restor the context (remove the styles and updates for other text that comes after this "game over")
+    this.ctx.restore(); // restore the context (remove the styles and updates for other text that comes after this "game over")
+  }
+
+  // Events
+
+  private eventsInit(world: World): void {
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (this._isGameOver && e.code === 'Backspace') {
+        this.start();
+      }
+
+      world.inputs.forEach((_) => _.keys.add(e.code));
+    });
+
+    document.addEventListener('keyup', (e: KeyboardEvent) => {
+      world.inputs.forEach((_) => _.keys.delete(e.code));
+    });
   }
 }

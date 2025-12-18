@@ -54,7 +54,7 @@ export class Zombie extends Entity {
 
     if (!player.isAlive()) return;
 
-    // distance from target poistion and entity
+    // distance from target position and entity
     const dx = player.x - this.x;
     const dy = player.y - this.y;
 

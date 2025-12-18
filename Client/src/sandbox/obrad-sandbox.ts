@@ -1,6 +1,8 @@
 import { Canvas } from '../canvas.js';
 import { SandboxGameObrad } from './obrad-sandbox-game.js';
 
+// No ECS here
+// Just bootstrapping app
 window.addEventListener('load', () => {
   app();
 });
