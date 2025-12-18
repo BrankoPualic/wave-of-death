@@ -3,6 +3,7 @@ import { gameOverSystem } from './ecs/systems/game-over-system.js';
 import { World } from './ecs/world.js';
 import { createObstacles } from './entities/create-obstacles.js';
 import { createPlayer } from './entities/create-player.js';
+import { createWorldBorders } from './entities/create-world-border.js';
 import { createZombies } from './entities/zombies/create-zombies.js';
 
 // Game ONLY:
@@ -57,6 +58,7 @@ export class Game {
 
     this._world.reset();
 
+    createWorldBorders(this._world);
     createObstacles(this._world);
     const player = createPlayer(this._world, this.canvas);
 
