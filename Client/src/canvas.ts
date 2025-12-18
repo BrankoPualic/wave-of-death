@@ -16,7 +16,7 @@ export class Canvas {
 
     this.load();
   }
-
+  
   getContext = () => this._ctx;
 
   load() {
